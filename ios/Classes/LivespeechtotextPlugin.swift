@@ -12,6 +12,7 @@ public class LivespeechtotextPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
     public static let channelName: String = "livespeechtotext"
     public static let eventSuccess: String = "success"
     private var eventSink: FlutterEventSink? = nil
+    private var currentLocale: Locale = Locale.current
     
   public static func register(with registrar: FlutterPluginRegistrar) {
       let channel = FlutterMethodChannel(name: self.channelName, binaryMessenger: registrar.messenger())
@@ -57,6 +58,22 @@ public class LivespeechtotextPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
     case "getText":
         result(recognizedText)
         break
+    case "getSupportedLocales":
+        result(getSupportedLocales())
+        break
+    case "getLocaleDisplayName":
+        result(getLocaleDisplayName())
+        break
+    case "setLocale":
+        if let args = call.arguments as? Dictionary<String, Any>,
+           let identifier = args["tag"] as? String {
+            setLocale(localIdentifier: identifier)
+         } else {
+           
+         }
+
+        result("")
+        break
     default:
         result(FlutterMethodNotImplemented)
     }
@@ -65,6 +82,10 @@ public class LivespeechtotextPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
     public func start(flutterResult: @escaping FlutterResult) throws {
         recognitionTask?.cancel()
         self.recognitionTask = nil
+        
+        if speechRecognizer?.locale.identifier != currentLocale.identifier {
+            speechRecognizer = SFSpeechRecognizer(locale: currentLocale)
+        }
 
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
@@ -135,5 +156,25 @@ public class LivespeechtotextPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
                }
             }
         }
+    }
+    
+    public func getSupportedLocales() -> [String: String] {
+        var locales = [String: String]()
+        let supportedLocales = SFSpeechRecognizer.supportedLocales()
+        for locale in supportedLocales {
+            let localizedName = locale.localizedString(forLanguageCode: locale.languageCode!)
+            locales[locale.identifier] = localizedName
+        }
+        return locales
+    }
+    
+    public func setLocale(localIdentifier: String) -> Void {
+        stop()
+        
+        currentLocale = Locale(identifier: localIdentifier)
+    }
+    
+    public func getLocaleDisplayName() -> String? {
+        return currentLocale.localizedString(forLanguageCode: currentLocale.languageCode!)
     }
 }
