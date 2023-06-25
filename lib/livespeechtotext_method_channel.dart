@@ -2,15 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:livespeechtotext/livespeechtotext.dart';
 
 import 'livespeechtotext_platform_interface.dart';
 
 /// An implementation of [LivespeechtotextPlatform] that uses method channels.
 class MethodChannelLivespeechtotext extends LivespeechtotextPlatform {
-  /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('livespeechtotext');
-  final eventChannel = const EventChannel('livespeechtotext');
+  final methodChannel = const MethodChannel(Livespeechtotext.channelName);
 
   @override
   Future<String?> start() async {
@@ -31,13 +30,14 @@ class MethodChannelLivespeechtotext extends LivespeechtotextPlatform {
   }
 
   @override
-  StreamSubscription<Map<String, dynamic>> addEventListener(
-      String eventName, Function(String? text) callback) {
-    EventChannel eventChannel = EventChannel("livespeechtotext/$eventName");
+  StreamSubscription addEventListener(
+      String eventName, Function(dynamic event) callback) {
+    String channelName = Livespeechtotext.channelName;
+    EventChannel eventChannel = EventChannel("$channelName/$eventName");
 
     return eventChannel
         .receiveBroadcastStream()
-        .map<Map<String, dynamic>>((event) => event)
-        .listen((event) => callback(event['text']));
+        .map((event) => event)
+        .listen((event) => callback(event));
   }
 }

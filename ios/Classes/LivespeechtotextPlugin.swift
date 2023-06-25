@@ -36,24 +36,15 @@ public class LivespeechtotextPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
     case "start":
-        print("startListening...")
-        print("getting permission...")
-        
         self.getPermissions{
-            print("settled permission")
-            
             do {
                 guard self.authorized else {
-                    print("not authorized")
                     result("")
                     return
                 }
                 
-                print("start recording..")
-                
                 try self.start(flutterResult: result)
             } catch {
-                print("error listerning")
                 result("")
             }
         }

@@ -8,3 +8,11 @@ By utilizing continuous speech recognition, the plugin enables a seamless and un
 
 This Flutter plugin offers a straightforward API, making it easy to implement and customize according to your application's needs. With its efficiency and accuracy, you can enhance user interactions and create innovative voice-driven experiences in your Flutter projects.
 
+
+## Troubleshoots
+
+* Android Emulator (without Android Studio) not receive input from microphone on MacOS 13
+  * Open 'Activity Monitor' find process name like 'qemu'. get the full process name
+  * run command
+    *  `sudo defaults write com.apple.security.device.microphone qemu-system-aarch64 -bool true`
+    * restart the emulator

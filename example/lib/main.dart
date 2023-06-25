@@ -20,17 +20,26 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late Livespeechtotext _livespeechtotextPlugin;
   late String _recognisedText;
+  late StreamSubscription<dynamic> onSuccess;
 
   @override
   void initState() {
     super.initState();
     _livespeechtotextPlugin = Livespeechtotext();
-    _livespeechtotextPlugin.addEventListener('success', (text) {
+
+    onSuccess = _livespeechtotextPlugin.addEventListener('success', (text) {
       setState(() {
         _recognisedText = text ?? '';
       });
     });
+
     _recognisedText = '';
+  }
+
+  @override
+  void dispose() {
+    onSuccess.cancel();
+    super.dispose();
   }
 
   @override

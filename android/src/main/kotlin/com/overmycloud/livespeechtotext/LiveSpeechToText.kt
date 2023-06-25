@@ -1,14 +1,17 @@
 package com.overmycloud.livespeechtotext
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.core.content.ContextCompat
-import android.content.Intent
-import android.os.Build
-import android.speech.RecognizerIntent
+import androidx.core.content.ContextCompat.getSystemService
+
 
 class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
 
@@ -24,7 +27,6 @@ class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
     }
 
     fun stop() {
-//        log("stop")
         speechRecognizer.stopListening()
         speechRecognizer.destroy()
         stopped = true
@@ -41,7 +43,7 @@ class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
 
         val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
 
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, pluginInstance.context.packageName)
             putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
 
@@ -57,6 +59,7 @@ class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
             return
         }
 
+        muteAudio()
         speechRecognizer.startListening(recognizerIntent)
     }
 
@@ -101,17 +104,38 @@ class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
         recognisedText = ""
         tempRecognisedText = ""
         pluginInstance.onError()
+
+        unmuteAudio()
     }
 
     override fun onResults(results: Bundle) {
         if(!stopped) {
             start()
+            return
         }
+
+        unmuteAudio()
     }
 
     private fun requestRecordAudioPermission(): Boolean {
         return ContextCompat.checkSelfPermission(pluginInstance.context,
             Manifest.permission.RECORD_AUDIO
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun muteAudio() {
+        // Get the AudioManager instance.
+        val audioManager = getSystemService(pluginInstance.context, AudioManager::class.java) as AudioManager
+
+        // Mute all streams.
+        audioManager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_MUTE, 0)
+    }
+
+    fun unmuteAudio() {
+        // Get the AudioManager instance.
+        val audioManager = getSystemService(pluginInstance.context, AudioManager::class.java) as AudioManager
+
+        // Mute all streams.
+        audioManager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_UNMUTE, 0)
     }
 }

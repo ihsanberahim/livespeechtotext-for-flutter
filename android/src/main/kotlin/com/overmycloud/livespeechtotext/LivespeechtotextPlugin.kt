@@ -19,7 +19,7 @@ class LivespeechtotextPlugin: FlutterPlugin, MethodCallHandler, StreamHandler {
   private lateinit var eventChannel : EventChannel
   private lateinit var lst: LiveSpeechToText
   private var eventSink: EventChannel.EventSink? = null
-  private var channelName = "livespeechtotext"
+  var channelName = "livespeechtotext"
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     context = flutterPluginBinding.applicationContext

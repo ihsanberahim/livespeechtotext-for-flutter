@@ -3,18 +3,19 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'livespeechtotext.dart';
 import 'livespeechtotext_platform_interface.dart';
 
 /// An implementation of [LivespeechtotextPlatform] that uses method channels.
 class EventChannelLivespeechtotext extends LivespeechtotextPlatform {
   EventChannelLivespeechtotext() {
-    onSuccessEvent = EventChannel("$channelName/success");
-    onAnyEvent = EventChannel(channelName);
+    const String channelName = Livespeechtotext.channelName;
+    const String eventSuccess = Livespeechtotext.eventSuccess;
+
+    onSuccessEvent = const EventChannel("$channelName/$eventSuccess");
+    onAnyEvent = const EventChannel(channelName);
   }
 
-  final String channelName = "livespeechtotext";
-
-  /// The method channel used to interact with the native platform.
   @visibleForTesting
   late final EventChannel onSuccessEvent;
 
@@ -23,9 +24,11 @@ class EventChannelLivespeechtotext extends LivespeechtotextPlatform {
 
   @override
   StreamSubscription<dynamic> addEventListener(
-      String eventName, Function(dynamic) callback) {
+    String eventName,
+    Function(dynamic) callback,
+  ) {
     switch (eventName) {
-      case 'success':
+      case Livespeechtotext.eventSuccess:
         return onSuccessEvent
             .receiveBroadcastStream()
             .map<dynamic>((event) => event)
@@ -34,7 +37,7 @@ class EventChannelLivespeechtotext extends LivespeechtotextPlatform {
         return onAnyEvent
             .receiveBroadcastStream()
             .map<dynamic>((event) => event)
-            .listen((event) => callback(event['text']));
+            .listen((event) => callback(event));
     }
   }
 }

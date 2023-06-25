@@ -1,19 +1,17 @@
 import 'dart:async';
 
 import 'package:livespeechtotext/livespeechtotext_event_channel.dart';
+import 'package:livespeechtotext/livespeechtotext_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
-import 'livespeechtotext_method_channel.dart';
 
 abstract class LivespeechtotextPlatform extends PlatformInterface {
   /// Constructs a LivespeechtotextPlatform.
   LivespeechtotextPlatform() : super(token: _token);
 
   static final Object _token = Object();
-
   static LivespeechtotextPlatform _methodChannel =
       MethodChannelLivespeechtotext();
-  static final LivespeechtotextPlatform _eventChannel =
+  static LivespeechtotextPlatform _eventChannel =
       EventChannelLivespeechtotext();
 
   /// The default instance of [LivespeechtotextPlatform] to use.
@@ -21,7 +19,7 @@ abstract class LivespeechtotextPlatform extends PlatformInterface {
   /// Defaults to [MethodChannelLivespeechtotext].
   static LivespeechtotextPlatform get instance => _methodChannel;
 
-  static LivespeechtotextPlatform get eventChannel => _eventChannel;
+  static LivespeechtotextPlatform get eventInstance => _eventChannel;
 
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [LivespeechtotextPlatform] when
@@ -29,6 +27,7 @@ abstract class LivespeechtotextPlatform extends PlatformInterface {
   static set instance(LivespeechtotextPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _methodChannel = instance;
+    _eventChannel = instance;
   }
 
   Future<String?> start() {
@@ -44,7 +43,9 @@ abstract class LivespeechtotextPlatform extends PlatformInterface {
   }
 
   StreamSubscription<dynamic> addEventListener(
-      String eventName, Function(dynamic) callback) {
+    String eventName,
+    Function(dynamic) callback,
+  ) {
     throw UnimplementedError('addEventListener() has not been implemented.');
   }
 }
