@@ -9,3 +9,7 @@
 ## 0.0.3
 
 * Update description
+
+## 1.0.4
+
+* Add change languange function for iOS/Android
