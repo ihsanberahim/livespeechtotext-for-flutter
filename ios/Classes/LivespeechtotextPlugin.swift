@@ -10,16 +10,17 @@ public class LivespeechtotextPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
     private var authorized: Bool = false
     private var recognizedText: String = ""
     public static let channelName: String = "livespeechtotext"
+    public static let eventSuccess: String = "success"
     private var eventSink: FlutterEventSink? = nil
     
   public static func register(with registrar: FlutterPluginRegistrar) {
       let channel = FlutterMethodChannel(name: self.channelName, binaryMessenger: registrar.messenger())
+      let eventChannel = FlutterEventChannel(name: "\(self.channelName)/\(self.eventSuccess)", binaryMessenger: registrar.messenger())
       
       let instance = LivespeechtotextPlugin()
     
-      let eventChannel = FlutterEventChannel(name: "\(self.channelName)/success", binaryMessenger: registrar.messenger())
-    
       eventChannel.setStreamHandler(instance)
+      
       registrar.addMethodCallDelegate(instance, channel: channel)
   }
     
@@ -99,9 +100,6 @@ public class LivespeechtotextPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
                 DispatchQueue.main.async {
                     let transcribedString = result.bestTranscription.formattedString
                     
-//                    self.recognizedText = transcribedString
-                    
-//                    print("transcribedString: \(transcribedString)")
                     self.eventSink?(transcribedString)
                     
                     flutterResult((transcribedString))
@@ -129,12 +127,10 @@ public class LivespeechtotextPlugin: NSObject, FlutterPlugin, FlutterStreamHandl
             OperationQueue.main.addOperation {
                switch authStatus {
                     case .authorized:
-                        print("authorised..")
                         self.authorized = true
                         callback()
                         break
                     default:
-                        print("none")
                         break
                }
             }

@@ -20,6 +20,7 @@ class LivespeechtotextPlugin: FlutterPlugin, MethodCallHandler, StreamHandler {
   private lateinit var lst: LiveSpeechToText
   private var eventSink: EventChannel.EventSink? = null
   var channelName = "livespeechtotext"
+  var eventSuccess = "success"
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     context = flutterPluginBinding.applicationContext
@@ -27,7 +28,7 @@ class LivespeechtotextPlugin: FlutterPlugin, MethodCallHandler, StreamHandler {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, channelName)
     channel.setMethodCallHandler(this)
 
-    eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "${channelName}/success")
+    eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "$channelName/$eventSuccess")
     eventChannel.setStreamHandler(this)
 
     lst = LiveSpeechToText(this)
@@ -47,6 +48,19 @@ class LivespeechtotextPlugin: FlutterPlugin, MethodCallHandler, StreamHandler {
       }
       "getText" -> {
         result.success(lst.getText())
+      }
+      "getSupportedLocales" -> {
+        result.success(lst.getSupportedLocales())
+      }
+      "getLocaleTag" -> {
+        result.success(lst.getLocaleTag())
+      }
+      "getLocaleDisplayName" -> {
+        result.success(lst.getLocaleDisplayName())
+      }
+      "setLocale" -> {
+        call.argument<String>("tag")?.let { lst.setLocale(it) }
+        result.success(null)
       }
       else -> {
         result.notImplemented()

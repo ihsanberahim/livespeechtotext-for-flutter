@@ -10,17 +10,28 @@ class MockLivespeechtotextPlatform
     with MockPlatformInterfaceMixin
     implements LivespeechtotextPlatform {
   @override
-  Future<String?> getText() => Future.value('');
-  @override
-  Future<String?> start() => Future.value('');
-  @override
-  Future<String?> stop() => Future.value('');
-
-  @override
   StreamSubscription<dynamic> addEventListener(
       String eventName, Function(dynamic p1) callback) {
     return addEventListener('', (p1) => null);
   }
+
+  @override
+  Future<String?> getLocaleDisplayName() => Future.value('');
+
+  @override
+  Future<Map<String, String>?> getSupportedLocales() => Future.value({});
+
+  @override
+  Future<String?> getText() => Future.value('');
+
+  @override
+  Future<dynamic> setLocale(String languageTag) => Future.value('');
+
+  @override
+  Future<String?> start() => Future.value('');
+
+  @override
+  Future<String?> stop() => Future.value('');
 }
 
 void main() {

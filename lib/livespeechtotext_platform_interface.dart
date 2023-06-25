@@ -30,22 +30,35 @@ abstract class LivespeechtotextPlatform extends PlatformInterface {
     _eventChannel = instance;
   }
 
-  Future<String?> start() {
-    throw UnimplementedError('start() has not been implemented.');
+  StreamSubscription<dynamic> addEventListener(
+    String eventName,
+    Function(dynamic) callback,
+  ) {
+    throw UnimplementedError('addEventListener() has not been implemented.');
   }
 
-  Future<String?> stop() {
-    throw UnimplementedError('stop() has not been implemented.');
+  Future<String?> getLocaleDisplayName() async {
+    throw UnimplementedError(
+        'getLocaleDisplayName() has not been implemented.');
+  }
+
+  Future<Map<String, String>?> getSupportedLocales() {
+    throw UnimplementedError('getSupportedLocales() has not been implemented.');
   }
 
   Future<String?> getText() {
     throw UnimplementedError('getText() has not been implemented.');
   }
 
-  StreamSubscription<dynamic> addEventListener(
-    String eventName,
-    Function(dynamic) callback,
-  ) {
-    throw UnimplementedError('addEventListener() has not been implemented.');
+  Future<dynamic> setLocale(String languageTag) {
+    throw UnimplementedError('setLocale() has not been implemented.');
+  }
+
+  Future<String?> start() {
+    throw UnimplementedError('start() has not been implemented.');
+  }
+
+  Future<String?> stop() {
+    throw UnimplementedError('stop() has not been implemented.');
   }
 }

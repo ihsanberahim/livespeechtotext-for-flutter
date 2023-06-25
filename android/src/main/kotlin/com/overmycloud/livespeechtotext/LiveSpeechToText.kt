@@ -7,11 +7,12 @@ import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognitionListener
+import android.speech.RecognitionSupport
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
-
+import java.util.Locale
 
 class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
 
@@ -20,10 +21,13 @@ class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
     private var recognisedText = ""
     private var tempRecognisedText = ""
     private var stopped = false
+    private var currentLocale: Locale = Locale.getDefault()
 
     init {
         pluginInstance = plugin
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(pluginInstance.context)
+
+        currentLocale = Locale.getDefault()
     }
 
     fun stop() {
@@ -43,6 +47,7 @@ class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
 
         val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
 
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, currentLocale)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, pluginInstance.context.packageName)
             putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
@@ -65,6 +70,62 @@ class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
 
     fun getText(): String {
         return recognisedText
+    }
+
+    private fun getCurrentLocale(): Locale {
+        return currentLocale
+    }
+
+    fun getLocaleTag(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            currentLocale.toLanguageTag()
+        } else {
+            ""
+        }
+    }
+
+    fun getLocaleDisplayName(): String {
+        return currentLocale.displayName
+    }
+
+
+    fun setLocale(languageTag: String) {
+        if (!stopped) {
+            stop()
+        }
+
+        currentLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Locale.forLanguageTag(languageTag)
+        } else {
+            Locale.getDefault()
+        }
+    }
+
+    fun getSupportedLocales(): MutableMap<String, String> {
+        val locales = mutableMapOf<String, String>()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val builder = RecognitionSupport.Builder()
+
+            val recognizer = builder.build()
+
+            var list = recognizer.installedOnDeviceLanguages
+
+            val availableLocales = mutableListOf<Locale>()
+
+            for(lang in list) {
+                availableLocales.add(Locale.forLanguageTag(lang))
+            }
+
+            for (locale in availableLocales) {
+                val name = locale.displayName
+                locales[locale.toLanguageTag()] = name
+            }
+        } else {
+            locales[""] = Locale.getDefault().displayName
+        }
+
+        return locales
     }
 
     override fun onPartialResults(partialResults: Bundle) {
@@ -101,6 +162,11 @@ class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
     }
 
     override fun onError(error: Int) {
+        if(!stopped) {
+            start()
+            return
+        }
+
         recognisedText = ""
         tempRecognisedText = ""
         pluginInstance.onError()

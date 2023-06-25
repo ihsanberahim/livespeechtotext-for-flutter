@@ -11,22 +11,34 @@ class Livespeechtotext {
   LivespeechtotextPlatform get _eventChannel =>
       LivespeechtotextPlatform.instance;
 
-  Future<String?> start() {
-    return _methodChannel.start();
+  StreamSubscription<dynamic> addEventListener(
+    String eventName,
+    Function(dynamic) callback,
+  ) {
+    return _eventChannel.addEventListener(eventName, callback);
+  }
+
+  Future<String?> getLocaleDisplayName() {
+    return _methodChannel.getLocaleDisplayName();
+  }
+
+  Future<Map<String, String>?> getSupportedLocales() {
+    return _methodChannel.getSupportedLocales();
   }
 
   Future<String?> getText() {
     return _methodChannel.getText();
   }
 
-  Future<String?> stop() {
-    return _methodChannel.stop();
+  Future<dynamic> setLocale(String languageTag) {
+    return _methodChannel.setLocale(languageTag);
   }
 
-  StreamSubscription<dynamic> addEventListener(
-    String eventName,
-    Function(dynamic) callback,
-  ) {
-    return _eventChannel.addEventListener(eventName, callback);
+  Future<String?> start() {
+    return _methodChannel.start();
+  }
+
+  Future<String?> stop() {
+    return _methodChannel.stop();
   }
 }

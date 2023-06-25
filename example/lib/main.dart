@@ -20,12 +20,23 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late Livespeechtotext _livespeechtotextPlugin;
   late String _recognisedText;
-  late StreamSubscription<dynamic> onSuccess;
+  String? _localeDisplayName = '';
+  late StreamSubscription<dynamic>? onSuccess;
 
   @override
   void initState() {
     super.initState();
     _livespeechtotextPlugin = Livespeechtotext();
+
+    // _livespeechtotextPlugin.setLocale('en-MY').then((value) async {
+    //   _localeDisplayName = await _livespeechtotextPlugin.getLocaleDisplayName();
+
+    //   setState(() {});
+    // });
+
+    _livespeechtotextPlugin.getLocaleDisplayName().then((value) => setState(
+          () => _localeDisplayName = value,
+        ));
 
     onSuccess = _livespeechtotextPlugin.addEventListener('success', (text) {
       setState(() {
@@ -33,12 +44,18 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
+    // _livespeechtotextPlugin
+    //     .getSupportedLocales()
+    //     .then((value) => value?.entries.forEach((element) {
+    //           print(element);
+    //         }));
+
     _recognisedText = '';
   }
 
   @override
   void dispose() {
-    onSuccess.cancel();
+    onSuccess?.cancel();
     super.dispose();
   }
 
@@ -72,7 +89,8 @@ class _MyAppState extends State<MyApp> {
                       print('error');
                     }
                   },
-                  child: const Text('Stop'))
+                  child: const Text('Stop')),
+              Text("Locale: $_localeDisplayName"),
             ],
           ),
         ),
