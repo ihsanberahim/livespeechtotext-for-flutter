@@ -13,3 +13,7 @@
 ## 1.0.4
 
 * Add change languange function for iOS/Android
+
+## 1.0.5
+
+* Included device permissions lists in README
