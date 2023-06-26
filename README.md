@@ -8,6 +8,20 @@ By utilizing continuous speech recognition, the plugin enables a seamless and un
 
 This Flutter plugin offers a straightforward API, making it easy to implement and customize according to your application's needs. With its efficiency and accuracy, you can enhance user interactions and create innovative voice-driven experiences in your Flutter projects.
 
+## Permissions
+
+* Android
+  ```
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+  ```
+* iOS
+  ```
+  <key>NSMicrophoneUsageDescription</key>
+	<string>Your voice input needed for the speech to text functionality</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Allow app to get text input from your speech</string>
+  ```
 
 ## Troubleshoots
 
