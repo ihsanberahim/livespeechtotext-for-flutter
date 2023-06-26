@@ -1,8 +1,12 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:livespeechtotext/livespeechtotext.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +25,9 @@ class _MyAppState extends State<MyApp> {
   late Livespeechtotext _livespeechtotextPlugin;
   late String _recognisedText;
   String? _localeDisplayName = '';
-  late StreamSubscription<dynamic>? onSuccess;
+  StreamSubscription<dynamic>? onSuccessEvent;
+
+  bool microphoneGranted = false;
 
   @override
   void initState() {
@@ -40,11 +46,13 @@ class _MyAppState extends State<MyApp> {
           () => _localeDisplayName = value,
         ));
 
-    onSuccess = _livespeechtotextPlugin.addEventListener('success', (text) {
-      setState(() {
-        _recognisedText = text ?? '';
-      });
-    });
+    // onSuccessEvent = _livespeechtotextPlugin.addEventListener('success', (text) {
+    //   setState(() {
+    //     _recognisedText = text ?? '';
+    //   });
+    // });
+
+    binding().whenComplete(() => null);
 
     // _livespeechtotextPlugin
     //     .getSupportedLocales()
@@ -57,7 +65,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    onSuccess?.cancel();
+    onSuccessEvent?.cancel();
     super.dispose();
   }
 
@@ -72,25 +80,36 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: [
               Text(_recognisedText),
-              ElevatedButton(
+              if (!microphoneGranted)
+                ElevatedButton(
                   onPressed: () {
-                    print("start button pressed");
-                    try {
-                      _livespeechtotextPlugin.start();
-                    } on PlatformException {
-                      print('error');
-                    }
+                    binding();
                   },
+                  child: const Text("Check Permissions"),
+                ),
+              ElevatedButton(
+                  onPressed: microphoneGranted
+                      ? () {
+                          print("start button pressed");
+                          try {
+                            _livespeechtotextPlugin.start();
+                          } on PlatformException {
+                            print('error');
+                          }
+                        }
+                      : null,
                   child: const Text('Start')),
               ElevatedButton(
-                  onPressed: () {
-                    print("stop button pressed");
-                    try {
-                      _livespeechtotextPlugin.stop();
-                    } on PlatformException {
-                      print('error');
-                    }
-                  },
+                  onPressed: microphoneGranted
+                      ? () {
+                          print("stop button pressed");
+                          try {
+                            _livespeechtotextPlugin.stop();
+                          } on PlatformException {
+                            print('error');
+                          }
+                        }
+                      : null,
                   child: const Text('Stop')),
               Text("Locale: $_localeDisplayName"),
             ],
@@ -98,5 +117,64 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> binding() async {
+    onSuccessEvent?.cancel();
+
+    return Future.wait([]).then((_) async {
+      // Check if the user has already granted microphone permission.
+      var permissionStatus = await Permission.microphone.status;
+
+      // If the user has not granted permission, prompt them for it.
+      if (!microphoneGranted) {
+        await Permission.microphone.request();
+
+        // Check if the user has already granted the permission.
+        permissionStatus = await Permission.microphone.status;
+
+        if (!permissionStatus.isGranted) {
+          return Future.error('Microphone access denied');
+        }
+      }
+
+      // Check if the user has already granted speech permission.
+      if (Platform.isIOS) {
+        var speechStatus = await Permission.speech.status;
+
+        // If the user has not granted permission, prompt them for it.
+        if (!microphoneGranted) {
+          await Permission.speech.request();
+
+          // Check if the user has already granted the permission.
+          speechStatus = await Permission.speech.status;
+
+          if (!speechStatus.isGranted) {
+            return Future.error('Speech access denied');
+          }
+        }
+      }
+
+      return Future.value(true);
+    }).then((value) {
+      microphoneGranted = true;
+
+      // listen to event "success"
+      onSuccessEvent =
+          _livespeechtotextPlugin.addEventListener("success", (value) {
+        if (value.runtimeType != String) return;
+        if ((value as String).isEmpty) return;
+
+        setState(() {
+          _recognisedText = value;
+        });
+      });
+
+      setState(() {});
+    }).onError((error, stackTrace) {
+      // toast
+      log(error.toString());
+      // open app setting
+    });
   }
 }

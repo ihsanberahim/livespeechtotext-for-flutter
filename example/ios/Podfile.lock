@@ -4,11 +4,14 @@ PODS:
     - Flutter
   - livespeechtotext (0.0.1):
     - Flutter
+  - permission_handler_apple (9.1.0):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - livespeechtotext (from `.symlinks/plugins/livespeechtotext/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
@@ -17,12 +20,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
   livespeechtotext:
     :path: ".symlinks/plugins/livespeechtotext/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: 13825b8a9334a850581300559b8839134b124670
   livespeechtotext: 554d747665baa83e841438e88cf8ad7d2fafd8bc
+  permission_handler_apple: 8f116445eff3c0e7c65ad60f5fef5490aa94b4e4
 
-PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
+PODFILE CHECKSUM: 957da581fd4b3178546f81fe052aac1d616eb5ed
 
 COCOAPODS: 1.12.1
