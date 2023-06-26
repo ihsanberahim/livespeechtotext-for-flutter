@@ -42,18 +42,32 @@ This Flutter plugin offers a straightforward API, making it easy to implement an
 
 ## Permissions
 
+It is highly recommended use '[permission_handler](https://pub.dev/packages/permission_handler)' package to make sure the user have required permissions granted.
+
 * Android
+  * `android/app/src/{debug,main,profile}/AndroidManifest.xml`
   ```
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
   ```
 * iOS
+  * `ios/Runner/Info.plist`
   ```
   <key>NSMicrophoneUsageDescription</key>
 	<string>Your voice input needed for the speech to text functionality</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Allow app to get text input from your speech</string>
   ```
+  * `ios/Podfile`
+    * First refer the [guide](https://pub.dev/packages/permission_handler#setup)
+    * Uncomment these lines
+    ```
+          ## dart: PermissionGroup.microphone
+          'PERMISSION_MICROPHONE=1',
+
+          ## dart: PermissionGroup.speech
+          'PERMISSION_SPEECH_RECOGNIZER=1',
+    ```
 
 ## Troubleshoots
 
