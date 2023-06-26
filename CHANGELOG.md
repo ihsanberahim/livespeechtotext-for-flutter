@@ -21,3 +21,7 @@
 ## 1.0.6
 
 * Updated example for the permission_handler usage part
+
+## 1.0.7
+
+* add dartdoc comments
