@@ -12,7 +12,7 @@ class Livespeechtotext {
   LivespeechtotextPlatform get _methodChannel =>
       LivespeechtotextPlatform.instance;
   LivespeechtotextPlatform get _eventChannel =>
-      LivespeechtotextPlatform.instance;
+      LivespeechtotextPlatform.eventInstance;
 
   /// Method to listen an event
   ///
