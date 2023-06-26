@@ -17,3 +17,7 @@
 ## 1.0.5
 
 * Included device permissions lists in README
+
+## 1.0.6
+
+* Updated example for the permission_handler usage part
