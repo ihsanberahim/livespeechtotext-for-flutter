@@ -34,8 +34,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _livespeechtotextPlugin = Livespeechtotext();
 
-    // Android sort of only english supported
-    // iOS could support ms-My
     // _livespeechtotextPlugin.setLocale('ms-MY').then((value) async {
     //   _localeDisplayName = await _livespeechtotextPlugin.getLocaleDisplayName();
 

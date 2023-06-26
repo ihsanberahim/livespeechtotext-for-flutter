@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'livespeechtotext.dart';
 import 'livespeechtotext_platform_interface.dart';
 
-/// An implementation of [LivespeechtotextPlatform] that uses method channels.
+/// An implementation of [LivespeechtotextPlatform] that uses event channels.
 class EventChannelLivespeechtotext extends LivespeechtotextPlatform {
   EventChannelLivespeechtotext() {
     const String channelName = Livespeechtotext.channelName;
@@ -16,12 +16,15 @@ class EventChannelLivespeechtotext extends LivespeechtotextPlatform {
     onAnyEvent = const EventChannel(channelName);
   }
 
+  /// event "success" instance
   @visibleForTesting
   late final EventChannel onSuccessEvent;
 
+  /// event "" instance
   @visibleForTesting
   late final EventChannel onAnyEvent;
 
+  /// An implementation of [LivespeechtotextPlatform.addEventListener]
   @override
   StreamSubscription<dynamic> addEventListener(
     String eventName,

@@ -19,6 +19,7 @@ abstract class LivespeechtotextPlatform extends PlatformInterface {
   /// Defaults to [MethodChannelLivespeechtotext].
   static LivespeechtotextPlatform get instance => _methodChannel;
 
+  /// The instance for [EventChannelLivespeechtotext]
   static LivespeechtotextPlatform get eventInstance => _eventChannel;
 
   /// Platform-specific implementations should set this with their own
@@ -30,6 +31,7 @@ abstract class LivespeechtotextPlatform extends PlatformInterface {
     _eventChannel = instance;
   }
 
+  /// Platform-specific method to register event
   StreamSubscription<dynamic> addEventListener(
     String eventName,
     Function(dynamic) callback,
@@ -37,27 +39,33 @@ abstract class LivespeechtotextPlatform extends PlatformInterface {
     throw UnimplementedError('addEventListener() has not been implemented.');
   }
 
+  /// Platform-specific method to get local display name
   Future<String?> getLocaleDisplayName() async {
     throw UnimplementedError(
         'getLocaleDisplayName() has not been implemented.');
   }
 
+  /// Platform-specific method to get supported language
   Future<Map<String, String>?> getSupportedLocales() {
     throw UnimplementedError('getSupportedLocales() has not been implemented.');
   }
 
+  /// Platform-specific method to get recognized text
   Future<String?> getText() {
     throw UnimplementedError('getText() has not been implemented.');
   }
 
+  /// Platform-specific method to change recognizer language
   Future<dynamic> setLocale(String languageTag) {
     throw UnimplementedError('setLocale() has not been implemented.');
   }
 
+  /// Platform-specific method to start speech-to-text
   Future<String?> start() {
     throw UnimplementedError('start() has not been implemented.');
   }
 
+  /// Platform-specific method to stop speech-to-text
   Future<String?> stop() {
     throw UnimplementedError('stop() has not been implemented.');
   }

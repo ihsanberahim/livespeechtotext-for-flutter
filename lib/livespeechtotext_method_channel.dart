@@ -11,24 +11,14 @@ class MethodChannelLivespeechtotext extends LivespeechtotextPlatform {
   @visibleForTesting
   final methodChannel = const MethodChannel(Livespeechtotext.channelName);
 
-  @override
-  StreamSubscription addEventListener(
-      String eventName, Function(dynamic event) callback) {
-    String channelName = Livespeechtotext.channelName;
-    EventChannel eventChannel = EventChannel("$channelName/$eventName");
-
-    return eventChannel
-        .receiveBroadcastStream()
-        .map((event) => event)
-        .listen((event) => callback(event));
-  }
-
+  /// An implementation of [LivespeechtotextPlatform.getLocaleDisplayName]
   @override
   Future<String?> getLocaleDisplayName() async {
     final output = await methodChannel.invokeMethod('getLocaleDisplayName');
     return output;
   }
 
+  /// An implementation of [LivespeechtotextPlatform.getSupportedLocales]
   @override
   Future<Map<String, String>?> getSupportedLocales() async {
     final output = await methodChannel.invokeMethod('getSupportedLocales');
@@ -43,12 +33,14 @@ class MethodChannelLivespeechtotext extends LivespeechtotextPlatform {
     return mapping;
   }
 
+  /// An implementation of [LivespeechtotextPlatform.getText]
   @override
   Future<String?> getText() async {
     final output = await methodChannel.invokeMethod('getText');
     return output;
   }
 
+  /// An implementation of [LivespeechtotextPlatform.setLocale]
   @override
   Future<dynamic> setLocale(String languageTag) async {
     final output = await methodChannel
@@ -56,12 +48,14 @@ class MethodChannelLivespeechtotext extends LivespeechtotextPlatform {
     return output;
   }
 
+  /// An implementation of [LivespeechtotextPlatform.start]
   @override
   Future<String?> start() async {
     final output = await methodChannel.invokeMethod('start');
     return output;
   }
 
+  /// An implementation of [LivespeechtotextPlatform.stop]
   @override
   Future<String?> stop() async {
     final output = await methodChannel.invokeMethod('stop');
