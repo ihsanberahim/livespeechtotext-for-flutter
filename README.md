@@ -8,6 +8,38 @@ By utilizing continuous speech recognition, the plugin enables a seamless and un
 
 This Flutter plugin offers a straightforward API, making it easy to implement and customize according to your application's needs. With its efficiency and accuracy, you can enhance user interactions and create innovative voice-driven experiences in your Flutter projects.
 
+## SDK
+ * Android
+  * MinSDK/CompileSDK 33
+    * `android/local.properties`
+    ```
+    def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
+    if (flutterMinSdkVersion == null) {
+        flutterMinSdkVersion = '33'
+    }
+
+    def flutterCompileSdkVersion = localProperties.getProperty('flutter.compileSdkVersion')
+    if (flutterCompileSdkVersion == null) {
+        flutterCompileSdkVersion = '33'
+    }
+    ```
+    * `android/app/build.gradle`
+    ```
+    android {
+        ...
+        compileSdkVersion flutterCompileSdkVersion.toInteger()
+        ...
+
+        defaultConfig {
+          ...
+          minSdkVersion flutterMinSdkVersion.toInteger()
+          ...
+        }
+    }
+    ```
+  * iOS
+    * this package tested on target iOS 13
+
 ## Permissions
 
 * Android
