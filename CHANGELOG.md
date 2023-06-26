@@ -25,3 +25,7 @@
 ## 1.0.7
 
 * add dartdoc comments
+
+## 1.0.8
+
+* update package description
