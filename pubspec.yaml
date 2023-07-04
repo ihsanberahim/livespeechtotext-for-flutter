@@ -1,6 +1,6 @@
 name: livespeechtotext
 description: "Effortlessly add speech-to-text to your Flutter apps, enabling voice-controlled features. Transcribe spoken words into text easier with this plugin."
-version: 1.0.8
+version: 1.0.9
 homepage: https://github.com/ihsanberahim/livespeechtotext-for-flutter
 
 environment:
