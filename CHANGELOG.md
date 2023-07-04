@@ -29,3 +29,7 @@
 ## 1.0.8
 
 * update package description
+
+## 1.0.9
+
+* lower down Android Min SDK 21 and Compile SDK 33

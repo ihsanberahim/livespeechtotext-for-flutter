@@ -4,17 +4,17 @@ Effortlessly add speech-to-text to your Flutter apps, enabling voice-controlled 
 
 ## SDK
  * Android
-  * MinSDK/CompileSDK 33
+  * MinSDK 21 /CompileSDK 31
     * `android/local.properties`
     ```
     def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
     if (flutterMinSdkVersion == null) {
-        flutterMinSdkVersion = '33'
+        flutterMinSdkVersion = '21'
     }
 
     def flutterCompileSdkVersion = localProperties.getProperty('flutter.compileSdkVersion')
     if (flutterCompileSdkVersion == null) {
-        flutterCompileSdkVersion = '33'
+        flutterCompileSdkVersion = '31'
     }
     ```
     * `android/app/build.gradle`
@@ -36,7 +36,7 @@ Effortlessly add speech-to-text to your Flutter apps, enabling voice-controlled 
 
 ## Permissions
 
-It is highly recommended use '[permission_handler](https://pub.dev/packages/permission_handler)' package to make sure the user have required permissions granted.
+It is highly recommended use [permission_handler:^9.2.0](https://pub.dev/packages/permission_handler) package to make sure the user have required permissions granted.
 
 * Android
   * `android/app/src/{debug,main,profile}/AndroidManifest.xml`

@@ -7,7 +7,6 @@ import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognitionListener
-import android.speech.RecognitionSupport
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.core.content.ContextCompat
@@ -104,26 +103,7 @@ class LiveSpeechToText(plugin: LivespeechtotextPlugin): RecognitionListener {
     fun getSupportedLocales(): MutableMap<String, String> {
         val locales = mutableMapOf<String, String>()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val builder = RecognitionSupport.Builder()
-
-            val recognizer = builder.build()
-
-            var list = recognizer.installedOnDeviceLanguages
-
-            val availableLocales = mutableListOf<Locale>()
-
-            for(lang in list) {
-                availableLocales.add(Locale.forLanguageTag(lang))
-            }
-
-            for (locale in availableLocales) {
-                val name = locale.displayName
-                locales[locale.toLanguageTag()] = name
-            }
-        } else {
-            locales[""] = Locale.getDefault().displayName
-        }
+        locales[""] = Locale.getDefault().displayName
 
         return locales
     }
