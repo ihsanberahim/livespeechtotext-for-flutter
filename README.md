@@ -7,6 +7,11 @@ Effortlessly add speech-to-text to your Flutter apps, enabling voice-controlled 
   * MinSDK 21 /CompileSDK 31
     * `android/local.properties`
     ```
+    flutter.minSdkVersion=21
+    flutter.compileSdkVersion=21
+    ```
+    * `android/app/build.gradle`
+    ```
     def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
     if (flutterMinSdkVersion == null) {
         flutterMinSdkVersion = '21'
@@ -17,7 +22,6 @@ Effortlessly add speech-to-text to your Flutter apps, enabling voice-controlled 
         flutterCompileSdkVersion = '31'
     }
     ```
-    * `android/app/build.gradle`
     ```
     android {
         ...
